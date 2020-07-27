@@ -27,13 +27,7 @@ def splitterList(lst_def):
     for dic in list_def:
         sourceIPList.append(dic['sourceIp'])
     for dic in list_def:
-        usernameList.append(dic['username'])summarylst= []
-
-    summarylst.append(sourceIPListSplitPercent)
-    summarylst.append(AccessKeyIDListSplitPercent)
-    summarylst.append(eventNameSplitPercent)
-    for i in summarylst:
-        if i is not None:
+        usernameList.append(dic['username'])
     for dic in list_def:
         accessKeyIdList.append(dic['AccessKeyId'])
     for dic in list_def:
