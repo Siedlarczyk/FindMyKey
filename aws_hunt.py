@@ -12,6 +12,7 @@ def counting (list):
     percent_list = []
     for i in counter:
         value = (counter[i] / len(list) * 100.0)
+        ##Adiconar IF para método de scan
         if value :
             valueStr = str(i) + ' ' + str((counter[i] / len(list) * 100.0))
             percent_list.append(valueStr)
