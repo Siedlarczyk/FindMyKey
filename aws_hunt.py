@@ -103,4 +103,3 @@ for dic in lst:
     lst_def.append(event)
 
 summaryUser(lst_def)
-print ("teste")
