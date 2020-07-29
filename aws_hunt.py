@@ -1,5 +1,6 @@
 #This tool has the idea to retrieve logs for a specific key, ip or user and then populate with might be deviations from normal behavior use
 import boto3
+import sys
 import json
 import argparse
 import datetime
@@ -154,24 +155,34 @@ def listGen(response):
         lst_def.append(event)
     return lst_def
 
-###MAIN###
-parser = cliParser()
-args = parser.parse_args()
-start = parsingDate(args.startDate)
-end = parsingDate(args.endDate)
-username = args.username
+def main():
 
-key = args.accesskeyId
+    #cli parsing
+    parser = cliParser()
+    args = parser.parse_args()
 
-if username is not None:
-        attribute = 'Username'
-        value = username
-else:
-        attribute = 'AccessKeyId'
-        value = key
+    #dates
+    start = parsingDate(args.startDate)
+    end = parsingDate(args.endDate)
 
-handle = ctHandler()
-response = getLogs(handle,attribute,value,start,end)
-lst_def = listGen(response)
+    #username and key
+    username = args.username
+    key = args.accesskeyId
 
-summaryUser(lst_def,value)
+    if username is not None:
+            attribute = 'Username'
+            value = username
+    elif key is not None:
+            attribute = 'AccessKeyId'
+            value = key
+    else:
+        print ("You must provide either a Username or an Access Key Id, --help for info")
+        sys.exit()
+
+    handle = ctHandler()
+    response = getLogs(handle,attribute,value,start,end)
+    lst_def = listGen(response)
+
+    summaryUser(lst_def,value)
+
+main ()
