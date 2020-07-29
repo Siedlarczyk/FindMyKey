@@ -9,13 +9,14 @@ from collections import Counter
 def counting (list):
     list = list
     counter = Counter(list)
-    percent_list = []
-    for i in counter:
-        value = (counter[i] / len(list) * 100.0)
+    percent_list =[]
+    for element in counter:
+        value = (counter[element] / len(list) * 100.0)
         ##Adiconar IF para método de scan
         if value :
-            valueStr = str(i) + ' ' + str((counter[i] / len(list) * 100.0))
-            percent_list.append(valueStr)
+            valueDict = dict(value=value,
+                            element= element)
+            percent_list.append(valueDict)
     return percent_list
 
 #funções para separar as listas por itens de cálculo
@@ -36,7 +37,8 @@ def splitterList(lst_def):
     return sourceIPList,usernameList,accessKeyIdList,eventNameList
 
 #função para sumarizar o uso do usuário
-def summaryUser (lst_def):
+def summaryUser (lst_def, username):
+    username = username
     #split de listas
     sourceIPListSplit, usernameListSplit,accessKeyIDListSplit,eventNameListSplit = splitterList(lst_def)
 
@@ -45,11 +47,28 @@ def summaryUser (lst_def):
     usernameListSplitPercent = counting(usernameListSplit)
     AccessKeyIDListSplitPercent = counting(accessKeyIDListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
-    ####PARSEAR PARA FORMATO FINAL###
 
-    print (sourceIPListSplitPercent)
-    print (AccessKeyIDListSplitPercent)
-    print (eventNameSplitPercent)
+    print(eventNameSplitPercent)
+    print("Username " + username + '\n')
+
+    #printing ips
+    for ip in sourceIPListSplitPercent:
+        element = ip['element']
+        value = str(ip['value'])
+        print('IP {} {}%'.format(element,value))
+
+    #printing keys
+    for key in AccessKeyIDListSplitPercent:
+        element = key['element']
+        value = str(key['value'])
+        print('key {} {}%'.format(element,value))
+
+    #printing events
+    for event in eventNameSplitPercent:
+        element = event['element']
+        value = str(event['value'])
+        print('event {} {}%'.format(element,value))
+
 
 
 def cliParser():
@@ -97,4 +116,4 @@ for dic in lst:
                  EventId=dic['EventId'])
     lst_def.append(event)
 
-summaryUser(lst_def)
+summaryUser(lst_def,value)
