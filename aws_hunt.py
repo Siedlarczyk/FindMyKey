@@ -95,18 +95,18 @@ def summaryKey (lst_def,key):
 
 def cliParser():
     parser = argparse.ArgumentParser(description = "Program to look for unlikely usage of keys or users, calculating the percentage of services, IPs, etc")
-    parser.add_argument('-u', action='store',dest ='username',
+    parser.add_argument('-u','--username', action='store',dest ='username',
                         required = False,
                         help = 'Enter the Username')
-    parser.add_argument('-k', action='store',dest ='accesskeyId',
+    parser.add_argument('-k','--accesskey', action='store',dest ='accesskeyId',
                          required = False,
                         help = 'Enter the AccessKeyId')
-    parser.add_argument('-sD', dest ='startDate',
+    parser.add_argument('-sD','--startdate', dest ='startDate',
                         default = (datetime.datetime.now() - datetime.timedelta(15)), required = False,
-                        help = 'Enter the start date, by default it checks for last 15 days')
-    parser.add_argument('-eD', action='store',dest ='endDate',
+                        help = 'Enter the start date, by default it checks for last 15 days, use the format YYYY-M-D')
+    parser.add_argument('-eD','--enddate', action='store',dest ='endDate',
                         default = (datetime.datetime.now()), required = False,
-                        help = 'Enter the end date, by default up to now')
+                        help = 'Enter the end date, by default up to now, use the format YYYY-M-D')
     return parser
 
 def ctHandler():
@@ -165,6 +165,9 @@ def main():
     start = parsingDate(args.startDate)
     end = parsingDate(args.endDate)
 
+    #cloudtrail handle
+    handle = ctHandler()
+
     #username and key
     username = args.username
     key = args.accesskeyId
@@ -172,17 +175,19 @@ def main():
     if username is not None:
             attribute = 'Username'
             value = username
+            response = getLogs(handle,attribute,value,start,end)
+            lst_def = listGen(response)
+            summaryUser(lst_def,value)
     elif key is not None:
             attribute = 'AccessKeyId'
             value = key
+            response = getLogs(handle,attribute,value,start,end)
+            lst_def = listGen(response)
+            summaryKey(lst_def,value)
     else:
         print ("You must provide either a Username or an Access Key Id, --help for info")
         sys.exit()
 
-    handle = ctHandler()
-    response = getLogs(handle,attribute,value,start,end)
-    lst_def = listGen(response)
 
-    summaryUser(lst_def,value)
 
 main ()
