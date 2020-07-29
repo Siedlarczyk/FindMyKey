@@ -10,7 +10,7 @@ The tool is in a very initial stage, but I intend to add more features to it as 
 ## What you'll nedd
 
 - Python3(tested on version 1.11.6)
-- Termocolor
+- Termcolor
 - Your AccessKeyId and secret configured (too lazy to code input for the keys)
 
 ## Installation
