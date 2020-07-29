@@ -11,11 +11,12 @@ The tool is very embrionary, but I intend to add more features to it as I receiv
 
 - Python3(tested on version 1.11.6)
 - Termocolor
+- Your AccessKeyId and secret configured (too lazy to code input for the keys)
 
 ## Installation
 
 ```
-git clone 
+git clone
 cd FindMyKey
 
 All set to use it!
@@ -24,11 +25,17 @@ All set to use it!
 ## Usage
 
 ```
-./python3 findmykey.py [-u USERNAME] [-k ACCESSKEYID]
-  -p PID
-    Specify the username
-  -k ACCESSKEYID
-    Specify the Keys
+./python3 findmykey.py [-u USERNAME] or [-k ACCESSKEYID]
+
+  Examples:
+  ./python3 findmykey.py -u root
+  It will check for deviations for root user for the last 15 days
+
+  ./python3 findmykey.py -u root -sD 2020-07-01 -eD 2020-07-15
+  It will check for deviations for root user for the specified range, if you surpress -eD will check up to now
+
+  ./python2 findmykey.py -k YOURACESSKEYID
+  It will check for deviations on the specified key
 ```
 
 ## Limitations
