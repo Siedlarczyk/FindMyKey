@@ -48,7 +48,7 @@ def summaryUser (lst_def, username):
     AccessKeyIDListSplitPercent = counting(accessKeyIDListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
 
-    print("Username " + username + '\n')
+    print("Username {} \n".format(username))
 
     #printing ips
     for ip in sourceIPListSplitPercent:
@@ -70,27 +70,21 @@ def summaryUser (lst_def, username):
 
 def summaryKey (lst_def,key):
     key = key
+    print (key)
     #split de listas
-    sourceIPListSplit, eventNameListSplit = splitterList(lst_def)
+    sourceIPListSplit, usernameListSplit,accessKeyIDListSplit,eventNameListSplit = splitterList(lst_def)
 
     #counting das listas
     sourceIPListSplitPercent = counting(sourceIPListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
 
-    print(eventNameSplitPercent)
-    print("Access Key ID" + username + '\n')
+    print("Access Key Id {} \n".format(key))
 
     #printing ips
     for ip in sourceIPListSplitPercent:
         element = ip['element']
         value = str(ip['value'])
         print('IP {} {}%'.format(element,value))
-
-    #printing keys
-    for key in AccessKeyIDListSplitPercent:
-        element = key['element']
-        value = str(key['value'])
-        print('Key {} {}%'.format(element,value))
 
     #printing events
     for event in eventNameSplitPercent:
@@ -112,43 +106,60 @@ def cliParser():
     parser.add_argument('-eD', action='store',dest ='endDate',
                         default = (datetime.datetime.now()), required = False,
                         help = 'Enter the end date, by default up to now')
-    parser.add_argument('-r', action='store',dest ='region',
-                        default = ('us-east-1'), required = False,
-                        help = 'Enter the region, by default it checks for us-east-1')
     return parser
 
+def ctHandler():
+    handle = boto3.client('cloudtrail')
+    return handle
 
+def getLogs(handle, attribute,value,startTime,endTime):
+    handle=handle
+    attribute=attribute
+    value=value
+    start=startTime
+    end=endTime
 
+    response = handle.lookup_events(
+            LookupAttributes=[
+            {
+            'AttributeKey': attribute,
+            'AttributeValue': value
+            }],
+            StartTime=start,
+            EndTime=end)
+    return response
+
+def listGen(response):
+    lst = response['Events']
+    lst_def = []
+    for element in lst:
+        event = ''
+        ct_json = json.loads(element['CloudTrailEvent'])
+        sourceIP = ct_json['sourceIPAddress']
+
+        event = dict(sourceIp=ct_json['sourceIPAddress'],
+                     username=element['Username'],
+                     EventName=element['EventName'],
+                     AccessKeyId=element['AccessKeyId'],
+                     EventId=element['EventId'])
+        lst_def.append(event)
+    return lst_def
+
+###MAIN###
 parser = cliParser()
 args = parser.parse_args()
 start = args.startDate
-if args.username is not None:
-        atribute = 'Username'
-        value = args.username
+end = args.endDate
+username = args.username
 
+key = args.accesskeyId
 
-handle = boto3.client('cloudtrail')
-response = handle.lookup_events(
-        LookupAttributes=[
-        {
-        'AttributeKey': atribute,
-        'AttributeValue': value
-        }],
-        StartTime=start,
-        EndTime=datetime.datetime.now())
+if username is not None:
+        attribute = 'Username'
+        value = username
 
-lst = response['Events']
-lst_def = []
-for dic in lst:
-    event = ''
-    ct_json = json.loads(dic['CloudTrailEvent'])
-    sourceIP = ct_json['sourceIPAddress']
-
-    event = dict(sourceIp=ct_json['sourceIPAddress'],
-                 username=dic['Username'],
-                 EventName=dic['EventName'],
-                 AccessKeyId=dic['AccessKeyId'],
-                 EventId=dic['EventId'])
-    lst_def.append(event)
+handle = ctHandler()
+response = getLogs(handle,attribute,value,start,end)
+lst_def = listGen(response)
 
 summaryUser(lst_def,value)
