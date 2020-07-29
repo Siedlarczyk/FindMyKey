@@ -7,9 +7,9 @@ You can use it both hunting by users or keys.
 
 The tool is in a very initial stage, but I intend to add more features to it as I receive feedbacks.
 
-## What you'll nedd
+## What you'll need
 
-- Python3(tested on version 1.11.6)
+- Python3
 - Termcolor
 - Your AccessKeyId and secret configured (too lazy to code input for the keys)
 
