@@ -95,10 +95,10 @@ def summaryKey (lst_def,key):
 def cliParser():
     parser = argparse.ArgumentParser(description = "Program to look for unlikely usage of keys or users, calculating the percentage of services, IPs, etc")
     parser.add_argument('-u', action='store',dest ='username',
-                        default = 'root', required = False,
-                        help = 'Enter the username, by default it uses root')
+                        required = False,
+                        help = 'Enter the Username')
     parser.add_argument('-k', action='store',dest ='accesskeyId',
-                        default = '', required = False,
+                         required = False,
                         help = 'Enter the AccessKeyId')
     parser.add_argument('-sD', action='store',dest ='startDate',
                         default = (datetime.datetime.now() - datetime.timedelta(15)), required = False,
@@ -111,6 +111,12 @@ def cliParser():
 def ctHandler():
     handle = boto3.client('cloudtrail')
     return handle
+
+def parsingDate(date):
+    date_entry = date
+    year, month, day = map(int, date_entry.split('-'))
+    date = datetime.datetime(year,month,day)
+    return date
 
 def getLogs(handle, attribute,value,startTime,endTime):
     handle=handle
@@ -148,8 +154,8 @@ def listGen(response):
 ###MAIN###
 parser = cliParser()
 args = parser.parse_args()
-start = args.startDate
-end = args.endDate
+start = parsingDate(args.startDate)
+end = parsingDate(args.endDate)
 username = args.username
 
 key = args.accesskeyId
@@ -157,6 +163,9 @@ key = args.accesskeyId
 if username is not None:
         attribute = 'Username'
         value = username
+else:
+        attribute = 'AccessKeyId'
+        value = key
 
 handle = ctHandler()
 response = getLogs(handle,attribute,value,start,end)
