@@ -100,7 +100,7 @@ def cliParser():
     parser.add_argument('-k', action='store',dest ='accesskeyId',
                          required = False,
                         help = 'Enter the AccessKeyId')
-    parser.add_argument('-sD', action='store',dest ='startDate',
+    parser.add_argument('-sD', dest ='startDate',
                         default = (datetime.datetime.now() - datetime.timedelta(15)), required = False,
                         help = 'Enter the start date, by default it checks for last 15 days')
     parser.add_argument('-eD', action='store',dest ='endDate',
@@ -114,8 +114,11 @@ def ctHandler():
 
 def parsingDate(date):
     date_entry = date
-    year, month, day = map(int, date_entry.split('-'))
-    date = datetime.datetime(year,month,day)
+    if type(date_entry) != datetime.datetime:
+        year, month, day = map(int, date_entry.split('-'))
+        date = datetime.datetime(year,month,day)
+    else:
+        date_entry=date
     return date
 
 def getLogs(handle, attribute,value,startTime,endTime):
