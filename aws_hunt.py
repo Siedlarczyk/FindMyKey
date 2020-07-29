@@ -4,6 +4,7 @@ import sys
 import json
 import argparse
 import datetime
+from termcolor import colored
 from collections import Counter
 
 #counter
@@ -14,7 +15,7 @@ def counting (list):
     for element in counter:
         value = (counter[element] / len(list) * 100.0)
         ##Adiconar IF para método de scan
-        if value :
+        if value:
             valueDict = dict(value=value,
                             element= element)
             percent_list.append(valueDict)
@@ -49,29 +50,46 @@ def summaryUser (lst_def, username):
     AccessKeyIDListSplitPercent = counting(accessKeyIDListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
 
-    print("Username {} \n".format(username))
+    print("[+]Username {}".format(username))
+    print("---------------------------------------")
 
     #printing ips
+    print("[+]IPs")
     for ip in sourceIPListSplitPercent:
         element = ip['element']
-        value = str(ip['value'])
-        print('IP {} {}%'.format(element,value))
-
+        value = ip['value']
+        if value <= 25:
+            print (colored('- {} {}%'.format(element,value),'red'))
+        elif value <=50:
+            print (colored('- {} {}%'.format(element,value),'yellow'))
+        else:
+            print (colored('- {} {}%'.format(element,value),'green'))
     #printing keys
+    print("[+]Keys")
     for key in AccessKeyIDListSplitPercent:
         element = key['element']
-        value = str(key['value'])
-        print('Key {} {}%'.format(element,value))
+        value = key['value']
+        if value <= 25:
+            print(colored('- {} {}%'.format(element,value),'red'))
+        elif value <= 50:
+            print(colored('- {} {}%'.format(element,value),'yellow'))
+        else:
+            print(colored('- {} {}%'.format(element,value),'green'))
 
     #printing events
+    print("[+]Events")
     for event in eventNameSplitPercent:
         element = event['element']
-        value = str(event['value'])
-        print('Event {} {}%'.format(element,value))
+        value = event['value']
+        if value <=25:
+            print(colored('- {} {}%'.format(element,value),'red'))
+        elif value <=50:
+            print(colored('- {} {}%'.format(element,value),'yellow'))
+        else:
+            print(colored('- {} {}%'.format(element,value),'green'))
 
 def summaryKey (lst_def,key):
     key = key
-    print (key)
     #split de listas
     sourceIPListSplit, usernameListSplit,accessKeyIDListSplit,eventNameListSplit = splitterList(lst_def)
 
@@ -79,19 +97,32 @@ def summaryKey (lst_def,key):
     sourceIPListSplitPercent = counting(sourceIPListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
 
-    print("Access Key Id {} \n".format(key))
+    print("[+] Access Key Id {}".format(key))
+    print("---------------------------------------")
 
     #printing ips
+    print("[+]IPs")
     for ip in sourceIPListSplitPercent:
         element = ip['element']
-        value = str(ip['value'])
-        print('IP {} {}%'.format(element,value))
+        value = ip['value']
+        if value <= 25:
+            print (colored('- {} {}%'.format(element,value),'red'))
+        elif value <=50:
+            print (colored('- {} {}%'.format(element,value),'yellow'))
+        else:
+            print (colored('- {} {}%'.format(element,value),'green'))
 
     #printing events
+    print("[+]Events")
     for event in eventNameSplitPercent:
         element = event['element']
-        value = str(event['value'])
-        print('Event {} {}%'.format(element,value))
+        value = event['value']
+        if value <=25:
+            print(colored('- {} {}%'.format(element,value),'red'))
+        elif value <=50:
+            print(colored('- {} {}%'.format(element,value),'yellow'))
+        else:
+            print(colored('- {} {}%'.format(element,value),'green'))
 
 def cliParser():
     parser = argparse.ArgumentParser(description = "Program to look for unlikely usage of keys or users, calculating the percentage of services, IPs, etc")
@@ -187,7 +218,5 @@ def main():
     else:
         print ("You must provide either a Username or an Access Key Id, --help for info")
         sys.exit()
-
-
 
 main ()
