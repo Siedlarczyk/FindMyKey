@@ -69,8 +69,6 @@ def summaryUser (lst_def, username):
         value = str(event['value'])
         print('event {} {}%'.format(element,value))
 
-
-
 def cliParser():
     parser = argparse.ArgumentParser(description = "Program to look for unlikely usage of keys or users")
     parser.add_argument('-u', action='store',dest ='username',
