@@ -48,7 +48,6 @@ def summaryUser (lst_def, username):
     AccessKeyIDListSplitPercent = counting(accessKeyIDListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
 
-    print(eventNameSplitPercent)
     print("Username " + username + '\n')
 
     #printing ips
@@ -61,30 +60,68 @@ def summaryUser (lst_def, username):
     for key in AccessKeyIDListSplitPercent:
         element = key['element']
         value = str(key['value'])
-        print('key {} {}%'.format(element,value))
+        print('Key {} {}%'.format(element,value))
 
     #printing events
     for event in eventNameSplitPercent:
         element = event['element']
         value = str(event['value'])
-        print('event {} {}%'.format(element,value))
+        print('Event {} {}%'.format(element,value))
+
+def summaryKey (lst_def,key):
+    key = key
+    #split de listas
+    sourceIPListSplit, eventNameListSplit = splitterList(lst_def)
+
+    #counting das listas
+    sourceIPListSplitPercent = counting(sourceIPListSplit)
+    eventNameSplitPercent = counting(eventNameListSplit)
+
+    print(eventNameSplitPercent)
+    print("Access Key ID" + username + '\n')
+
+    #printing ips
+    for ip in sourceIPListSplitPercent:
+        element = ip['element']
+        value = str(ip['value'])
+        print('IP {} {}%'.format(element,value))
+
+    #printing keys
+    for key in AccessKeyIDListSplitPercent:
+        element = key['element']
+        value = str(key['value'])
+        print('Key {} {}%'.format(element,value))
+
+    #printing events
+    for event in eventNameSplitPercent:
+        element = event['element']
+        value = str(event['value'])
+        print('Event {} {}%'.format(element,value))
 
 def cliParser():
-    parser = argparse.ArgumentParser(description = "Program to look for unlikely usage of keys or users")
+    parser = argparse.ArgumentParser(description = "Program to look for unlikely usage of keys or users, calculating the percentage of services, IPs, etc")
     parser.add_argument('-u', action='store',dest ='username',
                         default = 'root', required = False,
                         help = 'Enter the username, by default it uses root')
     parser.add_argument('-k', action='store',dest ='accesskeyId',
                         default = '', required = False,
                         help = 'Enter the AccessKeyId')
-    parser.add_argument('-d', action='store',dest ='date',
+    parser.add_argument('-sD', action='store',dest ='startDate',
                         default = (datetime.datetime.now() - datetime.timedelta(15)), required = False,
-                        help = 'Enter the date, by default it checks for last 15 days')
+                        help = 'Enter the start date, by default it checks for last 15 days')
+    parser.add_argument('-eD', action='store',dest ='endDate',
+                        default = (datetime.datetime.now()), required = False,
+                        help = 'Enter the end date, by default up to now')
+    parser.add_argument('-r', action='store',dest ='region',
+                        default = ('us-east-1'), required = False,
+                        help = 'Enter the region, by default it checks for us-east-1')
     return parser
+
+
 
 parser = cliParser()
 args = parser.parse_args()
-start = args.date
+start = args.startDate
 if args.username is not None:
         atribute = 'Username'
         value = args.username
