@@ -16,8 +16,9 @@ The tool is very embrionary, but I intend to add more features to it as I receiv
 ## Installation
 
 ```
-git clone
+git clone https://github.com/Siedlarczyk/FindMyKey.git
 cd FindMyKey
+pip3 install -r requirements.txt (truth be told, you're probably like to have all the libs, except for termcolor, but here it is anyway)
 
 All set to use it!
 ```
