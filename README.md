@@ -1,7 +1,7 @@
 # What is FindMyKey?
 
 FindMyKey is a very simple tool, which aims to help identify deviations from normal behavior of an AWS user or an Aws Access key.
-It's been though to simplifie initial investigations, when other market tools are in no place at the moment.
+It's been thought to simplifie initial investigations, when other market tools are in no place at the moment.
 It checks the percentage of IPs used, Event Names, and access keys.
 You can use it both huntig by users or keys.
 
