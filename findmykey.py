@@ -222,12 +222,13 @@ def main():
                 nextToken = response['NextToken']
                 #iterating through pages
                 while nextToken is not None:
-                        print("Analyzing...")
+                        print("[!]Analyzing...")
                         response = getLogsNextPage(handle,attribute,value,start,end,nextToken)
                         lst_def.extend(listGen(response))
                         if 'NextToken'in response:
                             nextToken = response['NextToken']
                         else:
+                            print ('\n')
                             break
 
             summaryUser(lst_def,value)
@@ -241,12 +242,13 @@ def main():
                 nextToken = response['NextToken']
                 #iterating through pages
                 while nextToken is not None:
-                        print("Analyzing...")
+                        print("[!] Analyzing...")
                         response = getLogsNextPage(handle,attribute,value,start,end,nextToken)
                         lst_def.extend(listGen(response))
                         if 'NextToken'in response:
                             nextToken = response['NextToken']
                         else:
+                            print('\n')
                             break
 
             summaryKey(lst_def,value)
