@@ -225,7 +225,6 @@ def main():
                         print("Analyzing...")
                         response = getLogsNextPage(handle,attribute,value,start,end,nextToken)
                         lst_def.extend(listGen(response))
-
                         if 'NextToken'in response:
                             nextToken = response['NextToken']
                         else:
