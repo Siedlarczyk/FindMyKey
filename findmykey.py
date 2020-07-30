@@ -1,6 +1,7 @@
 #This tool has the idea to retrieve logs for a specific key, ip or user and then populate with might be deviations from normal behavior use
 import boto3
 import sys
+import pyfiglet
 import json
 import argparse
 import datetime
@@ -50,6 +51,7 @@ def summaryUser (lst_def, username):
     AccessKeyIDListSplitPercent = counting(accessKeyIDListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
 
+    print(pyfiglet.figlet_format("FindMyKey"))
     print("[+]Username {}".format(username))
     print("---------------------------------------")
 
@@ -97,6 +99,7 @@ def summaryKey (lst_def,key):
     sourceIPListSplitPercent = counting(sourceIPListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
 
+    print(pyfiglet.figlet_format("FindMyKey"))
     print("[+] Access Key Id {}".format(key))
     print("---------------------------------------")
 
@@ -141,7 +144,7 @@ def cliParser():
     return parser
 
 def ctHandler():
-    handle = boto3.client('cloudtrail')
+    handle = boto3.client('cloudtrail', verify=False)
     return handle
 
 def parsingDate(date):
