@@ -144,7 +144,7 @@ def cliParser():
     return parser
 
 def ctHandler():
-    handle = boto3.client('cloudtrail', verify=False)
+    handle = boto3.client('cloudtrail')
     return handle
 
 def parsingDate(date):
