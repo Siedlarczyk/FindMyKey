@@ -16,7 +16,7 @@ def counting (list):
     for element in counter:
         value = (counter[element] / len(list) * 100.0)
         ##Adiconar IF para método de scan
-        if value:
+        if value :
             valueDict = dict(value=value,
                             element= element)
             percent_list.append(valueDict)
@@ -34,8 +34,6 @@ def splitterList(lst_def):
     for dic in list_def:
         usernameList.append(dic['username'])
     for dic in list_def:
-        accessKeyIdList.append(dic['AccessKeyId'])
-    for dic in list_def:
         eventNameList.append(dic['EventName'])
     return sourceIPList,usernameList,accessKeyIdList,eventNameList
 
@@ -51,7 +49,7 @@ def summaryUser (lst_def, username):
     AccessKeyIDListSplitPercent = counting(accessKeyIDListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
 
-    print(pyfiglet.figlet_format("FindMyKey"))
+
     print("[+]Username {}".format(username))
     print("---------------------------------------")
 
@@ -66,17 +64,6 @@ def summaryUser (lst_def, username):
             print (colored('- {} {}%'.format(element,value),'yellow'))
         else:
             print (colored('- {} {}%'.format(element,value),'green'))
-    #printing keys
-    print("[+]Keys")
-    for key in AccessKeyIDListSplitPercent:
-        element = key['element']
-        value = key['value']
-        if value <= 25:
-            print(colored('- {} {}%'.format(element,value),'red'))
-        elif value <= 50:
-            print(colored('- {} {}%'.format(element,value),'yellow'))
-        else:
-            print(colored('- {} {}%'.format(element,value),'green'))
 
     #printing events
     print("[+]Events")
@@ -99,7 +86,7 @@ def summaryKey (lst_def,key):
     sourceIPListSplitPercent = counting(sourceIPListSplit)
     eventNameSplitPercent = counting(eventNameListSplit)
 
-    print(pyfiglet.figlet_format("FindMyKey"))
+
     print("[+] Access Key Id {}".format(key))
     print("---------------------------------------")
 
@@ -144,7 +131,7 @@ def cliParser():
     return parser
 
 def ctHandler():
-    handle = boto3.client('cloudtrail')
+    handle = boto3.client('cloudtrail', verify=False)
     return handle
 
 def parsingDate(date):
@@ -173,6 +160,25 @@ def getLogs(handle, attribute,value,startTime,endTime):
             EndTime=end)
     return response
 
+def getLogsNextPage(handle, attribute,value,startTime,endTime,nextToken):
+    handle=handle
+    attribute=attribute
+    value=value
+    start=startTime
+    end=endTime
+    nextToken=nextToken
+
+    response = handle.lookup_events(
+            LookupAttributes=[
+            {
+            'AttributeKey': attribute,
+            'AttributeValue': value
+            }],
+            StartTime=start,
+            EndTime=end,
+            NextToken=nextToken)
+    return response
+
 def listGen(response):
     lst = response['Events']
     lst_def = []
@@ -184,12 +190,13 @@ def listGen(response):
         event = dict(sourceIp=ct_json['sourceIPAddress'],
                      username=element['Username'],
                      EventName=element['EventName'],
-                     AccessKeyId=element['AccessKeyId'],
                      EventId=element['EventId'])
         lst_def.append(event)
     return lst_def
 
 def main():
+
+    print(pyfiglet.figlet_format("FindMyKey"))
 
     #cli parsing
     parser = cliParser()
@@ -211,12 +218,37 @@ def main():
             value = username
             response = getLogs(handle,attribute,value,start,end)
             lst_def = listGen(response)
+            if 'NextToken' in response:
+                nextToken = response['NextToken']
+                #iterating through pages
+                while nextToken is not None:
+                        print("Analyzing...")
+                        response = getLogsNextPage(handle,attribute,value,start,end,nextToken)
+                        lst_def.extend(listGen(response))
+
+                        if 'NextToken'in response:
+                            nextToken = response['NextToken']
+                        else:
+                            break
+
             summaryUser(lst_def,value)
+
     elif key is not None:
             attribute = 'AccessKeyId'
             value = key
             response = getLogs(handle,attribute,value,start,end)
             lst_def = listGen(response)
+            if 'NextToken' in response:
+                nextToken = response['NextToken']
+                #iterating through pages
+                while nextToken is not None:
+                        print("Analyzing...")
+                        response = getLogsNextPage(handle,attribute,value,start,end,nextToken)
+                        lst_def.extend(listGen(response))
+                        if 'NextToken'in response:
+                            nextToken = response['NextToken']
+                        else:
+                            break
             summaryKey(lst_def,value)
     else:
         print ("You must provide either a Username or an Access Key Id, --help for info")
