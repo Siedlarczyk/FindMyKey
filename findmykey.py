@@ -248,6 +248,7 @@ def main():
                             nextToken = response['NextToken']
                         else:
                             break
+                            
             summaryKey(lst_def,value)
     else:
         print ("You must provide either a Username or an Access Key Id, --help for info")
