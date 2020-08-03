@@ -6,6 +6,7 @@ It checks the percentage of IPs used, Event Names, and access keys.
 You can use it both hunting by users or keys.
 
 The tool is in a very initial stage, but I intend to add more features to it as I receive feedbacks.
+![](https://github.com/Siedlarczyk/FindMyKey/blob/Dev/output_findmykey.png)
 
 ![](https://github.com/Siedlarczyk/FindMyKey/blob/Dev/output_findmykey.png)
 
