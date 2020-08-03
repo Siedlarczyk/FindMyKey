@@ -58,24 +58,26 @@ def summaryUser (lst_def, username):
     for ip in sourceIPListSplitPercent:
         element = ip['element']
         value = ip['value']
+
         if value <= 25:
-            print (colored('- {} {}%'.format(element,value),'red'))
+            print (colored('- {} - {:.2f}%'.format(element,value),'red'))
         elif value <=50:
-            print (colored('- {} {}%'.format(element,value),'yellow'))
+            print (colored('- {} - {:.2f}%'.format(element,value),'yellow'))
         else:
-            print (colored('- {} {}%'.format(element,value),'green'))
+            print (colored('- {} - {:.2f}%'.format(element,value),'green'))
 
     #printing events
     print("[+]Events")
     for event in eventNameSplitPercent:
         element = event['element']
         value = event['value']
+
         if value <=25:
-            print(colored('- {} {}%'.format(element,value),'red'))
+            print(colored('- {} - {:.3f}%'.format(element,value),'red'))
         elif value <=50:
-            print(colored('- {} {}%'.format(element,value),'yellow'))
+            print(colored('- {} - {:.3f}%'.format(element,value),'yellow'))
         else:
-            print(colored('- {} {}%'.format(element,value),'green'))
+            print(colored('- {} - {:.3f}%'.format(element,value),'green'))
 
 def summaryKey (lst_def,key):
     key = key
@@ -96,11 +98,11 @@ def summaryKey (lst_def,key):
         element = ip['element']
         value = ip['value']
         if value <= 25:
-            print (colored('- {} {}%'.format(element,value),'red'))
+            print (colored('- {} - {:.2f}%'.format(element,value),'red'))
         elif value <=50:
-            print (colored('- {} {}%'.format(element,value),'yellow'))
+            print (colored('- {} - {:.2f}%'.format(element,value),'yellow'))
         else:
-            print (colored('- {} {}%'.format(element,value),'green'))
+            print (colored('- {} - {:.2f}%'.format(element,value),'green'))
 
     #printing events
     print("[+]Events")
@@ -108,11 +110,11 @@ def summaryKey (lst_def,key):
         element = event['element']
         value = event['value']
         if value <=25:
-            print(colored('- {} {}%'.format(element,value),'red'))
+            print(colored('- {} - {:.3f}%'.format(element,value),'red'))
         elif value <=50:
-            print(colored('- {} {}%'.format(element,value),'yellow'))
+            print(colored('- {} - {:.3f}%'.format(element,value),'yellow'))
         else:
-            print(colored('- {} {}%'.format(element,value),'green'))
+            print(colored('- {} - {:.3f}%'.format(element,value),'green'))
 
 def cliParser():
     parser = argparse.ArgumentParser(description = "Program to look for unlikely usage of keys or users, calculating the percentage of services, IPs, etc")
